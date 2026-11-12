@@ -40,11 +40,15 @@ fetch("data.json")
       img.classList.add("loaded");
       document.getElementById("skeleton").classList.add("gone");
     };
-    // local image first; fall back to the Met server if missing
+    // local image first: try images/ folder, then repo root, then the Met server
       img.src = art.local;
       img.onerror = () => {
         img.onerror = null;
-        img.src = (art.imgSmall || art.img || "").replace("http://", "https://");
+        img.src = art.local.split("/").pop();
+        img.onerror = () => {
+          img.onerror = null;
+          img.src = (art.imgSmall || art.img || "").replace("http://", "https://");
+        };
       };
 
     // share button
