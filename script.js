@@ -40,7 +40,12 @@ fetch("data.json")
       img.classList.add("loaded");
       document.getElementById("skeleton").classList.add("gone");
     };
-    img.src = art.local;
+    // local image first; fall back to the Met server if missing
+      img.src = art.local;
+      img.onerror = () => {
+        img.onerror = null;
+        img.src = (art.imgSmall || art.img || "").replace("http://", "https://");
+      };
 
     // share button
     document.getElementById("btnShare").onclick = async () => {
